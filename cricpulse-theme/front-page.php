@@ -1,0 +1,108 @@
+<?php
+/**
+ * CricPulse Dedicated Front Page Template
+ * Automatically displays CricPulse Live on the root homepage!
+ */
+
+get_header();
+?>
+
+<!-- Section 1: Live Cricket Matches App -->
+<section class="cricket-live-ticker-wrap">
+    <div class="cricpulse-container">
+        <div id="cp-live-root"></div>
+    </div>
+</section>
+
+<?php
+// If the user has assigned a static front page with content:
+if (have_posts()) :
+    while (have_posts()) : the_post();
+        $content = get_the_content();
+        // Avoid duplicate rendering if the user already pasted [cricpulse_live] inside the page body
+        if (!empty($content) && strpos($content, '[cricpulse_live]') === false) :
+?>
+            <section class="cricpulse-page-content-wrap">
+                <div class="cricpulse-container" style="max-width: 1280px; margin: 30px auto; padding: 0 15px;">
+                    <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 30px;">
+                        <?php the_content(); ?>
+                    </div>
+                </div>
+            </section>
+<?php
+        endif;
+    endwhile;
+endif;
+?>
+
+<!-- Section 2: WordPress Articles & News Posts -->
+<section class="cricpulse-articles-section">
+    <div class="cricpulse-container">
+        
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px;">
+            <h2 style="font-size: 24px; font-weight: 800; color: #ffffff; margin: 0;">
+                <?php _e('Latest Cricket Articles & News', 'cricpulse-theme'); ?>
+            </h2>
+            <span style="font-size: 13px; color: #94a3b8;">
+                <?php _e('புதிய செய்திகள் & கட்டுரைகள்', 'cricpulse-theme'); ?>
+            </span>
+        </div>
+
+        <?php
+        $recent_posts = new WP_Query(array(
+            'posts_per_page' => 6,
+            'post_status'    => 'publish',
+        ));
+
+        if ($recent_posts->have_posts()) : ?>
+            <div class="article-grid">
+                <?php while ($recent_posts->have_posts()) : $recent_posts->the_post(); ?>
+                    <article id="post-<?php the_ID(); ?>" <?php post_class('article-card'); ?>>
+                        <?php if (has_post_thumbnail()) : ?>
+                            <a href="<?php the_permalink(); ?>">
+                                <?php the_post_thumbnail('medium_large', array('class' => 'article-thumbnail')); ?>
+                            </a>
+                        <?php endif; ?>
+
+                        <div class="article-content">
+                            <span class="article-category">
+                                <?php
+                                $categories = get_the_category();
+                                if (!empty($categories)) {
+                                    echo esc_html($categories[0]->name);
+                                }
+                                ?>
+                            </span>
+
+                            <h3 class="article-title">
+                                <a href="<?php the_permalink(); ?>"><?php the_title(); ?></a>
+                            </h3>
+
+                            <div class="article-excerpt">
+                                <?php echo wp_trim_words(get_the_excerpt(), 18, '...'); ?>
+                            </div>
+
+                            <div class="article-meta">
+                                <span><?php echo get_the_date(); ?></span>
+                                <span><?php the_author(); ?></span>
+                            </div>
+                        </div>
+                    </article>
+                <?php endwhile; wp_reset_postdata(); ?>
+            </div>
+        <?php else : ?>
+            <div style="background: #0f172a; border: 1px solid #1e293b; border-radius: 16px; padding: 40px; text-align: center; margin: 30px 0;">
+                <p style="color: #94a3b8; font-size: 15px; margin-bottom: 12px;">
+                    <?php _e('No articles published yet (இன்னும் கட்டுரைகள் எதுவும் பதிவிடப்படவில்லை).', 'cricpulse-theme'); ?>
+                </p>
+                <p style="color: #64748b; font-size: 13px;">
+                    <?php _e('WordPress Admin -> Posts -> Add New to publish cricket articles.', 'cricpulse-theme'); ?>
+                </p>
+            </div>
+        <?php endif; ?>
+
+    </div>
+</section>
+
+<?php
+get_footer();

@@ -22,6 +22,21 @@ app.use((req, res, next) => {
 });
 app.use(express.json());
 
+// Explicit high-reliability download endpoints for WordPress Plugin & Theme
+app.get('/api/download/plugin', (req, res) => {
+  const filePath = path.resolve(process.cwd(), 'public/cricpulse-plugin.zip');
+  res.setHeader('Content-Type', 'application/zip');
+  res.setHeader('Content-Disposition', 'attachment; filename="cricpulse-plugin.zip"');
+  return res.sendFile(filePath);
+});
+
+app.get('/api/download/theme', (req, res) => {
+  const filePath = path.resolve(process.cwd(), 'public/cricpulse-theme-flat.zip');
+  res.setHeader('Content-Type', 'application/zip');
+  res.setHeader('Content-Disposition', 'attachment; filename="cricpulse-theme-direct.zip"');
+  return res.sendFile(filePath);
+});
+
 // Cache for trending cricket match
 let cachedTrendingMatch: any = null;
 let lastTrendingFetchTime = 0;

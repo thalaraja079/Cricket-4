@@ -26,10 +26,10 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Top Bar: Brand, Navigation, and Controls */}
         <div className="flex items-center justify-between h-16 gap-4">
           
-          {/* Zone 1: Single text element wordmark with sports accent */}
+          {/* Zone 1: Wordmark with sports accent */}
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setActiveTab('all')}
+              onClick={() => setActiveTab('live')}
               className="text-left group flex items-center gap-2 cursor-pointer focus:outline-none"
             >
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-700 flex items-center justify-center shadow-lg shadow-emerald-500/20 text-white font-bold text-base">
@@ -44,29 +44,17 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
           </div>
 
-          {/* Zone 2: Navigation Links */}
+          {/* Zone 2: Navigation Links (Live Scores First!) */}
           <nav className="hidden md:flex items-center gap-1 lg:gap-2">
             <button
-              onClick={() => setActiveTab('all')}
+              onClick={() => setActiveTab('live')}
               className={`px-3 py-1.5 text-sm font-semibold rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'all'
+                activeTab === 'live'
                   ? 'bg-emerald-600 text-white shadow-sm'
                   : 'text-slate-300 hover:text-white hover:bg-slate-900/60'
               }`}
             >
-              <span>🏠</span>
-              <span>{tr.all}</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('live')}
-              className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
-                activeTab === 'live'
-                  ? 'bg-slate-800 text-white border border-slate-700 shadow-sm'
-                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
-              }`}
-            >
-              <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse-live" />
+              <span className="w-2 h-2 rounded-full bg-red-400 animate-pulse" />
               <span>{tr.liveScores}</span>
             </button>
 
@@ -74,7 +62,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setActiveTab('upcoming')}
               className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                 activeTab === 'upcoming'
-                  ? 'bg-slate-800 text-white border border-slate-700 shadow-sm'
+                  ? 'bg-emerald-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
               }`}
             >
@@ -85,7 +73,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setActiveTab('points')}
               className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                 activeTab === 'points'
-                  ? 'bg-slate-800 text-white border border-slate-700 shadow-sm'
+                  ? 'bg-emerald-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
               }`}
             >
@@ -96,7 +84,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setActiveTab('results')}
               className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                 activeTab === 'results'
-                  ? 'bg-slate-800 text-white border border-slate-700 shadow-sm'
+                  ? 'bg-emerald-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
               }`}
             >
@@ -107,11 +95,23 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setActiveTab('stats')}
               className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors whitespace-nowrap cursor-pointer ${
                 activeTab === 'stats'
-                  ? 'bg-slate-800 text-white border border-slate-700 shadow-sm'
+                  ? 'bg-emerald-600 text-white shadow-sm'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
               }`}
             >
               {tr.stats}
+            </button>
+
+            <button
+              onClick={() => setActiveTab('all')}
+              className={`px-3 py-1.5 text-sm font-medium rounded-lg transition-colors whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+                activeTab === 'all'
+                  ? 'bg-slate-800 text-white border border-slate-700 shadow-sm'
+                  : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60'
+              }`}
+            >
+              <span>🌟</span>
+              <span>{tr.all}</span>
             </button>
           </nav>
 
@@ -145,30 +145,21 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Mobile Navigation bar */}
+        {/* Mobile Navigation bar (Live Scores First!) */}
         <div className="md:hidden flex items-center justify-between py-2 border-t border-slate-900 gap-1 overflow-x-auto text-xs">
           <button
-            onClick={() => setActiveTab('all')}
-            className={`px-2.5 py-1 rounded font-semibold whitespace-nowrap flex items-center gap-1 ${
-              activeTab === 'all' ? 'bg-emerald-600 text-white' : 'text-slate-300'
-            }`}
-          >
-            <span>🏠</span>
-            {tr.all}
-          </button>
-          <button
             onClick={() => setActiveTab('live')}
-            className={`px-2.5 py-1 rounded font-medium whitespace-nowrap flex items-center gap-1 ${
-              activeTab === 'live' ? 'bg-slate-800 text-emerald-400' : 'text-slate-400'
+            className={`px-2.5 py-1 rounded font-bold whitespace-nowrap flex items-center gap-1 ${
+              activeTab === 'live' ? 'bg-emerald-600 text-white' : 'text-slate-300'
             }`}
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse-live" />
+            <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
             {tr.liveScores}
           </button>
           <button
             onClick={() => setActiveTab('upcoming')}
             className={`px-2.5 py-1 rounded font-medium whitespace-nowrap ${
-              activeTab === 'upcoming' ? 'bg-slate-800 text-white' : 'text-slate-400'
+              activeTab === 'upcoming' ? 'bg-emerald-600 text-white' : 'text-slate-400'
             }`}
           >
             {tr.upcoming}
@@ -176,7 +167,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={() => setActiveTab('points')}
             className={`px-2.5 py-1 rounded font-medium whitespace-nowrap ${
-              activeTab === 'points' ? 'bg-slate-800 text-white' : 'text-slate-400'
+              activeTab === 'points' ? 'bg-emerald-600 text-white' : 'text-slate-400'
             }`}
           >
             {tr.pointsTable}
@@ -184,7 +175,7 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={() => setActiveTab('results')}
             className={`px-2.5 py-1 rounded font-medium whitespace-nowrap ${
-              activeTab === 'results' ? 'bg-slate-800 text-white' : 'text-slate-400'
+              activeTab === 'results' ? 'bg-emerald-600 text-white' : 'text-slate-400'
             }`}
           >
             {tr.completed}
@@ -192,10 +183,19 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={() => setActiveTab('stats')}
             className={`px-2.5 py-1 rounded font-medium whitespace-nowrap ${
-              activeTab === 'stats' ? 'bg-slate-800 text-white' : 'text-slate-400'
+              activeTab === 'stats' ? 'bg-emerald-600 text-white' : 'text-slate-400'
             }`}
           >
             {tr.stats}
+          </button>
+          <button
+            onClick={() => setActiveTab('all')}
+            className={`px-2.5 py-1 rounded font-medium whitespace-nowrap flex items-center gap-1 ${
+              activeTab === 'all' ? 'bg-slate-800 text-white' : 'text-slate-400'
+            }`}
+          >
+            <span>🌟</span>
+            {tr.all}
           </button>
         </div>
       </div>

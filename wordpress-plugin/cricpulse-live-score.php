@@ -3,7 +3,7 @@
  * Plugin Name: CricPulse Live Cricket Scores & Points Table
  * Plugin URI: https://ais-pre-lpqxoewxjngaqxidjp7znm-67909262050.asia-east1.run.app
  * Description: Real-time Google Trending cricket live scores, ball-by-ball commentary in Tamil & English, upcoming schedule, AI match analysis, and points table.
- * Version: 2.0.0
+ * Version: 2.2.0
  * Author: CricPulse
  * Author URI: https://ais-pre-lpqxoewxjngaqxidjp7znm-67909262050.asia-east1.run.app
  * License: GPL2
@@ -26,14 +26,14 @@ function cricpulse_plugin_enqueue_scripts() {
         'cricpulse-plugin-style',
         plugin_dir_url(__FILE__) . 'assets/cricket-app.css',
         array('cricpulse-plugin-fonts'),
-        '2.0.0'
+        '2.2.0'
     );
 
     wp_register_script(
         'cricpulse-plugin-script',
         plugin_dir_url(__FILE__) . 'assets/cricket-app.js',
         array(),
-        '2.0.0',
+        '2.2.0',
         true
     );
 }

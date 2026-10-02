@@ -31,21 +31,21 @@ function cricpulse_enqueue_scripts() {
         null
     );
 
-    wp_enqueue_style('cricpulse-style', get_stylesheet_uri(), array(), '2.0.0');
+    wp_enqueue_style('cricpulse-style', get_stylesheet_uri(), array(), '2.2.0');
 
     // Always enqueue standalone native cricket app for 100% reliable Hostinger WordPress execution
     wp_enqueue_style(
         'cricpulse-app-style',
         get_template_directory_uri() . '/assets/cricket-app.css',
         array(),
-        '2.0.0'
+        '2.2.0'
     );
 
     wp_enqueue_script(
         'cricpulse-app-script',
         get_template_directory_uri() . '/assets/cricket-app.js',
         array(),
-        '2.0.0',
+        '2.2.0',
         true
     );
 
@@ -54,6 +54,13 @@ function cricpulse_enqueue_scripts() {
         'apiKey'       => get_option('cricpulse_api_key', ''),
         'provider'     => get_option('cricpulse_provider', 'google_trending'),
         'lang'         => 'en',
+        'defaultTab'   => 'live',
+        'manualMatch'  => array(
+            'title' => get_option('cricpulse_manual_upcoming_title', ''),
+            'time'  => get_option('cricpulse_manual_datetime', ''),
+            'venue' => get_option('cricpulse_manual_venue', ''),
+        ),
+        'customBanner' => get_option('cricpulse_custom_banner', ''),
         'restEndpoint' => esc_url_raw(rest_url('cricpulse/v1/live')),
         'nonce'        => wp_create_nonce('wp_rest'),
     ));
@@ -176,6 +183,10 @@ function cricpulse_register_settings() {
     register_setting('cricpulse_options_group', 'cricpulse_provider');
     register_setting('cricpulse_options_group', 'cricpulse_google_api_key');
     register_setting('cricpulse_options_group', 'cricpulse_api_key');
+    register_setting('cricpulse_options_group', 'cricpulse_manual_upcoming_title');
+    register_setting('cricpulse_options_group', 'cricpulse_manual_datetime');
+    register_setting('cricpulse_options_group', 'cricpulse_manual_venue');
+    register_setting('cricpulse_options_group', 'cricpulse_custom_banner');
 }
 add_action('admin_init', 'cricpulse_register_settings');
 
@@ -185,6 +196,10 @@ function cricpulse_render_api_settings_page() {
     $provider = get_option('cricpulse_provider', 'google_trending');
     $google_key = get_option('cricpulse_google_api_key', '');
     $api_key = get_option('cricpulse_api_key', '');
+    $manual_title = get_option('cricpulse_manual_upcoming_title', '');
+    $manual_datetime = get_option('cricpulse_manual_datetime', '');
+    $manual_venue = get_option('cricpulse_manual_venue', '');
+    $custom_banner = get_option('cricpulse_custom_banner', '');
     $test_result = null;
 
     if (isset($_POST['cricpulse_test_connection'])) {
@@ -288,24 +303,65 @@ function cricpulse_render_api_settings_page() {
 
                 <tr valign="top">
                     <th scope="row">
-                        <strong style="font-size: 14px; color: #0f172a;">Google Trending / Gemini API Key</strong><br>
-                        <small style="color: #64748b;">(கூகுள் டிரெண்டிங் API கீ)</small>
+                        <strong style="font-size: 14px; color: #0f172a;">Live Cricket API Key</strong><br>
+                        <small style="color: #64748b;">(நேரலை கிரிக்கெட் API கீ)</small>
                     </th>
                     <td>
-                        <input type="text" name="cricpulse_google_api_key" value="<?php echo esc_attr($google_key); ?>" style="width: 100%; max-width: 450px; padding: 9px 14px; border-radius: 8px; border: 1px solid #cbd5e1; font-family: monospace;" placeholder="AIzaSy... உங்கள் Gemini API Key" />
+                        <input type="text" name="cricpulse_google_api_key" value="<?php echo esc_attr(!empty($google_key) ? $google_key : $api_key); ?>" style="width: 100%; max-width: 480px; padding: 9px 14px; border-radius: 8px; border: 1px solid #cbd5e1; font-family: monospace;" placeholder="உங்கள் Google Gemini API Key அல்லது CricAPI Key" />
                         <p class="description" style="color: #64748b; margin-top: 6px;">
-                            கூகுள் AI ஸ்டுடியோவில் இருந்து பெறப்பட்ட உங்கள் API கீயை இங்கே பேஸ்ட் செய்யவும். (இது கூகுள் சர்ச் மூலம் நேரடி ஸ்கோர் பெற உதவும்).
+                            உங்கள் Google AI Studio (Gemini API Key) அல்லது CricAPI Key-ஐ இங்கே உள்ளிடவும். ஒரு முறை உள்ளிட்டால் போதுமானது.
                         </p>
                     </td>
                 </tr>
 
                 <tr valign="top">
+                    <th colspan="2" style="padding-top: 24px; padding-bottom: 8px; border-top: 1px solid #e2e8f0;">
+                        <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #0f172a;">
+                            ✏️ Manual Match & Banner Manager (விருப்பத்திற்கேற்ப புதிய போட்டிகளை சேர்க்க)
+                        </h3>
+                        <p style="margin: 4px 0 0; font-size: 12px; color: #64748b;">
+                            நீங்கள் விரும்பும் ஏதேனும் ஒரு புதிய போட்டியை மேனுவலாக அட்டவணையின் மேலே முன்னுரிமையுடன் காட்டலாம்.
+                        </p>
+                    </th>
+                </tr>
+
+                <tr valign="top">
                     <th scope="row">
-                        <strong style="font-size: 14px; color: #0f172a;">BigBallsData / CricAPI Key</strong><br>
-                        <small style="color: #64748b;">(மாற்று API கீ தேவைப்பட்டால்)</small>
+                        <strong style="font-size: 13px; color: #0f172a;">Custom Top Banner Alert</strong><br>
+                        <small style="color: #64748b;">(மேல் அறிவிப்பு பேனர்)</small>
                     </th>
                     <td>
-                        <input type="text" name="cricpulse_api_key" value="<?php echo esc_attr($api_key); ?>" style="width: 100%; max-width: 450px; padding: 9px 14px; border-radius: 8px; border: 1px solid #cbd5e1; font-family: monospace;" placeholder="bbs_live_... அல்லது CricAPI Key" />
+                        <input type="text" name="cricpulse_custom_banner" value="<?php echo esc_attr($custom_banner); ?>" style="width: 100%; max-width: 550px; padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1;" placeholder="எடுத்துக்காட்டு: 🔥 இன்று மதியம் 1:30 மணிக்கு இந்தியா vs வெஸ்ட் இண்டீஸ் 3வது ஒருநாள் போட்டி!" />
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row">
+                        <strong style="font-size: 13px; color: #0f172a;">Manual Upcoming Match Title</strong><br>
+                        <small style="color: #64748b;">(போட்டியின் பெயர்)</small>
+                    </th>
+                    <td>
+                        <input type="text" name="cricpulse_manual_upcoming_title" value="<?php echo esc_attr($manual_title); ?>" style="width: 100%; max-width: 550px; padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1;" placeholder="India vs West Indies • 3rd ODI" />
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row">
+                        <strong style="font-size: 13px; color: #0f172a;">Date & Time</strong><br>
+                        <small style="color: #64748b;">(தேதி & நேரம்)</small>
+                    </th>
+                    <td>
+                        <input type="text" name="cricpulse_manual_datetime" value="<?php echo esc_attr($manual_datetime); ?>" style="width: 100%; max-width: 400px; padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1;" placeholder="Saturday, Oct 3, 2026 • 1:30 PM IST" />
+                    </td>
+                </tr>
+
+                <tr valign="top">
+                    <th scope="row">
+                        <strong style="font-size: 13px; color: #0f172a;">Venue Stadium</strong><br>
+                        <small style="color: #64748b;">(அரங்கம் / மைதானம்)</small>
+                    </th>
+                    <td>
+                        <input type="text" name="cricpulse_manual_venue" value="<?php echo esc_attr($manual_venue); ?>" style="width: 100%; max-width: 450px; padding: 8px 12px; border-radius: 8px; border: 1px solid #cbd5e1;" placeholder="New Chandigarh (Mullanpur)" />
                     </td>
                 </tr>
             </table>

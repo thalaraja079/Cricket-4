@@ -23,7 +23,7 @@ export default function App() {
   };
 
   const [lang, setLang] = useState<Language>(getInitialLang);
-  const [activeTab, setActiveTab] = useState<'all' | 'live' | 'upcoming' | 'points' | 'results' | 'stats'>('all');
+  const [activeTab, setActiveTab] = useState<'all' | 'live' | 'upcoming' | 'points' | 'results' | 'stats'>('live');
   const [isWordPressModalOpen, setIsWordPressModalOpen] = useState<boolean>(false);
 
   const toggleLanguage = () => {

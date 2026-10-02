@@ -41,7 +41,7 @@ export const AiMatchAnalysisModal: React.FC<AiMatchAnalysisModalProps> = ({
       setSimulating(false);
       setLoadingAi(false);
       const winTeam = (match.winProbabilityTeam2 ?? 50) >= 50 ? match.team2 : match.team1;
-      setPredictedWinner(lang === 'ta' ? winTeam.nameTa : winTeam.name);
+      setPredictedWinner((lang === 'ta' ? winTeam.nameTa : winTeam.name) || winTeam.name);
     }
   };
 

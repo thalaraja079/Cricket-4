@@ -378,39 +378,22 @@ export const FeaturedLiveMatch: React.FC<FeaturedLiveMatchProps> = ({
               </div>
             )}
 
-            {/* Instant Interaction Actions Toolbar */}
+            {/* Live Status & AI Tactical Analysis */}
             <div className="flex items-center justify-between gap-2 p-2.5 rounded-xl bg-slate-950/90 border border-slate-800/80">
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={onTogglePlay}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                    isPlaying 
-                      ? 'bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 border border-amber-500/30' 
-                      : 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-500/30'
-                  }`}
-                >
-                  {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-                  <span>{isPlaying ? tr.pause : tr.resume}</span>
-                </button>
-
-                <button
-                  onClick={onToggleSpeed}
-                  className="px-2.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-slate-300 text-xs font-mono border border-slate-800 transition-colors flex items-center gap-1 cursor-pointer"
-                  title="Simulation Speed"
-                >
-                  <FastForward className="w-3.5 h-3.5 text-cyan-400" />
-                  <span>{speedMs === 1500 ? tr.speedFast : tr.speedLive}</span>
-                </button>
+              <div className="flex items-center gap-2 text-xs text-slate-400">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="font-semibold text-slate-300">
+                  {lang === 'ta' ? 'அதிகாரப்பூர்வ நேரலை தரவு இணைக்கப்பட்டுள்ளது' : 'Live Official Data Connected'}
+                </span>
               </div>
 
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={onNextBall}
-                  className="px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md shadow-emerald-950/40 transition-all cursor-pointer active:scale-95"
-                >
-                  {tr.nextBall} →
-                </button>
-              </div>
+              <button
+                onClick={onOpenAnalysis}
+                className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 shadow-md shadow-emerald-950/40"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <span>{lang === 'ta' ? 'AI கணிப்பு & பகுப்பாய்வு' : 'AI Match Insights'}</span>
+              </button>
             </div>
 
           </div>
